@@ -2,6 +2,8 @@ const { Router } = require("express");
 const Users = require("../dao/models/users.model");
 const { hashPassword, comparePassword } = require("../utils/bcrypt.util");
 const passport = require("passport");
+const { passportCustom } = require("../utils/passport.config");
+const sessionController = requuire("../DAO/Managers/session.manager");
 
 const router = Router();
 
@@ -53,5 +55,7 @@ router.post("/forgot-password", async (req, res) => {
     res.status(500).send("Error al crear usuario");
   }
 });
+
+router.get("/current", passportCustom("jwt"), sessionController.getCurrent);
 
 module.exports = router;
