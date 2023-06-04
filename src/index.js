@@ -8,7 +8,10 @@ const mongoConnect = require("../db");
 const InitPassport = require("./utils/passport.config");
 const router = require("./router");
 
-const port = 3000;
+const { port } = require("./config/app.config");
+const { dbAdmin, dbHost, dbPassword, dbName } = require("./config/db.config");
+const { secret } = require("./config/session.config");
+
 const app = express();
 
 //handlebars
@@ -27,11 +30,10 @@ app.use(express.json());
 app.use(
   session({
     store: connectMongo.create({
-      mongoUrl:
-        "mongodb+srv://admin:admin@coder.n7ppfjp.mongodb.net/coder?retryWrites=true&w=majority",
+      mongoUrl: `mongodb+srv://${dbAdmin}:${dbPassword}@${dbHost}/${dbName}?retryWrites=true&w=majority`,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
     }),
-    secret: "clavesecreta",
+    secret: secret,
     resave: true,
     saveUninitialized: true,
   })
